@@ -1,0 +1,358 @@
+﻿@model VendorVM
+
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary m-lg-0 py-0">
+        <div class="row">
+            <div class="col-12 text-center">
+             
+                @if (Model.Id != 0)
+                {
+                    <h2 class="text-white py-2">Update Vendor</h2>
+                }
+                else
+                {
+                    <h2 class="text-white py-2">Create Vendor</h2>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <form method="post" class="row" enctype="multipart/form-data"  >
+            <input asp-for="Id" hidden />
+
+            @*page one*@
+            <div class="row" id="step1">
+                <div class="col-10">
+                    <div class="border p-3">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Name" class="form-control border-0 shadow" />
+                            <label asp-for="Name" class="ms-2"></label>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Email" type="text" class="form-control border-0 shadow" />
+                            <label asp-for="Email" class="ms-2"></label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="PhoneNumber" type="number" class="form-control border-0 shadow" />
+                            <label asp-for="PhoneNumber" class="ms-2"></label>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Notes" class="form-control border-0 shadow" />
+                            <label asp-for="Notes" class="ms-2"></label>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input type="file" name="file" class="form-control border-0 shadow" multiple />
+                            <label asp-for="imageurl" class="ms-2"></label>
+                        </div>
+
+                    </div>
+                   
+                    <div class="row pt-2">
+
+
+                        <div class="col-6 col-md-6">
+                            <input asp-for="Id" hidden />
+                            <a asp-controller="Vendor" asp-action="Index" class="btn btn-primary  form-control">
+                                Back To List
+                            </a>
+                        </div>
+
+                        <div class="col-6  col-md-6">
+@*
+                            <a asp-controller="Vendor" asp-action="Index" class="btn btn-primary  form-control">
+                                Back To List
+                            </a>
+*@
+                            <button type="button" class="btn btn-primary form-control" onclick="nextButton()">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-2" >
+
+                    <div class="border p-1 m-2 text-center">
+                        @if (Model.Id != 0)
+                        {
+                            <img src="@Model.imageurl" width="100%"
+                            style="border-radius:5px; border:1px solid #bbb9b9" />
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+
+            @*page two*@
+
+            
+            <div class="row" id="step2">
+                <div class="col-10">
+
+
+                    
+                        <form method="post" class="row" asp-controller="VendorAddress" asp-action="Upsert" >
+                            <input asp-for="VendorAddress.AddressID" hidden/>
+                            <div class="border p-3">
+
+                                <div asp-validation-summary="All" class="text-danger"></div>
+
+                                <div class="form-floating py-2 col-12">
+                                    <input asp-for="VendorAddress.AddressLine1" class="form-control border-0 shadow" />
+                                    <label asp-for="VendorAddress.AddressLine1" class="ms-2"></label>
+                                    <span asp-validation-for="VendorAddress.AddressLine1" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-12">
+                                    <input asp-for="VendorAddress.AddressLine2" type="text" class="form-control border-0 shadow" />
+                                    <label asp-for="VendorAddress.AddressLine2" class="ms-2"></label>
+                                    <span asp-validation-for="VendorAddress.AddressLine2" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-floating py-2 col-12">
+                                    <input asp-for="VendorAddress.LandMark" class="form-control border-0 shadow" />
+                                    <label asp-for="VendorAddress.LandMark" class="ms-2"></label>
+                                    <span asp-validation-for="VendorAddress.LandMark" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-floating py-2 col-12">
+                                    <select asp-for="@Model.CountryID" asp-items="ViewBag.CountryList" class="form-select border-0 shadow" id="selectlist">
+                                        <option></option>
+                                    </select>
+                                    <label class="ms-2">CountryID</label>
+                                    @*  <span asp-validation-for="CountryID" class="text-danger"></span>*@
+
+                                </div>
+
+                                <div class="form-floating py-2 col-12">
+                                    <select asp-for="@Model.StateID" asp-items="ViewBag.StateList" class="form-select border-0 shadow" id="StateListWrapper">
+                                        <option></option>
+
+                                    </select>
+                                    <label class="ms-2">StateID</label>
+                                    @*    <span asp-validation-for="StateID" class="text-danger"></span>*@
+                                </div>
+                                <div class="form-floating py-2 col-12">
+                                    <select asp-for="VendorAddress.CityID" asp-items="ViewBag.CityList" class="form-select border-0 shadow" id="CityListWrapper">
+                                        <option></option>
+                                    </select>
+                                    <label asp-for="CityID" class="ms-2"></label>
+                                    <span asp-validation-for="CityID" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating py-2 col-12">
+                                    <input asp-for="VendorAddress.PinCode" class="form-control border-0 shadow" />
+                                    <label asp-for="VendorAddress.PinCode" class="ms-2"></label>
+                                    <span asp-validation-for="VendorAddress.PinCode" class="text-danger"></span>
+                                </div>
+                                @*Address submit button*@
+                                <div class="row pt-2">
+                                    <div class="col-6 col-md-6">
+
+                                        @if (Model.Id != 0)
+                                        {
+                                            <button type="submit" asp-action="Address" class="btn btn-primary form-control"> Update</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" asp-action="Address" class="btn btn-primary form-control">Create Address</button>
+                                        }
+
+                                        @*<button type="button" class="btn btn-primary form-control" onclick="preButton()">Prev</button>*@
+                                    </div>
+
+                                    <div class="col-6  col-md-6">
+
+                                        <a asp-controller="Vendor" asp-action="Index" class="btn btn-primary  form-control">
+                                            Back To List
+                                        </a>
+
+                                        @*
+                                    @if (Model.Id != 0)
+                                    {
+
+                                    <button type="submit" class="btn btn-primary form-control"> Update</button>
+                                    }
+                                    else
+                                    {
+
+                                    <button type="submit" class="btn btn-primary form-control">Create</button>
+                                    }*@
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                   
+                    <div class="row pt-2">
+
+
+                        
+                        <div class="col-6 col-md-6">
+@*
+                        @if (Model.Id != 0)
+                        {
+
+                        <button type="submit" class="btn btn-primary form-control"> Update</button>
+                        }
+                        else
+                        {
+
+                        <button type="submit" class="btn btn-primary form-control">Create</button>
+                        }*@
+
+                            <button type="button" class="btn btn-primary form-control" onclick="preButton()">Prev</button>
+                        </div>
+
+                        <div class="col-6  col-md-6">
+@*
+                            <a asp-controller="Vendor" asp-action="Index" class="btn btn-primary  form-control">
+                                Back To List
+                            </a>*@
+
+                            
+                            @if (Model.Id != 0)
+                            {
+
+                            <button type="submit" class="btn btn-primary form-control"> Update</button>
+                            }
+                            else
+                            {
+
+                            <button type="submit" class="btn btn-primary form-control">Create</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-2">
+
+                    <div class="border p-1 m-2 text-center">
+                        @if (Model.Id != 0)
+                        {
+                            <img src="@Model.imageurl" width="100%"
+                                 style="border-radius:5px; border:1px solid #bbb9b9" />
+                        }
+                    </div>
+                </div>
+            </div>
+            
+
+                        @*List Of VendorAddress*@
+                        <div class="card shadow border-0 mt-4">
+                            <div class="card-header bg-secondary m-lg-0 py-0">
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <h2 class="text-white py-2">Address List</h2>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="card-body p-4">
+                                <div class="row pb-3">
+                                    <div class="text-end">
+                                        <a href="/Vendor/upsert?id=@Model.Id" class="btn btn-primary">
+                                              <i class="bi bi-plus-circle"></i>Create New Address
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <table id="tblData" class="table table-bordered table-striped" style="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>AddressLine1</th>
+                                            <th>AddressLine2</th>
+                                            <th>LandMark</th>
+                                            <th>CityID</th>
+                                            <th>VendorID</th>
+                                            <th>PinCode</th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+
+                            </div>
+
+                        </div>
+                 
+        </form>
+    </div>
+</div>
+
+
+@section Scripts
+    {
+<script>
+
+    
+            $("#selectlist").change(function () {
+                var countryId = $("#selectlist").val();
+                $.ajax
+                    ({
+                        type: "GET",
+                        url: "/Vendor/stateListView?value=" + countryId,
+                        success: function (result) {
+                        $("#StateListWrapper").html(result)
+                        $("#StateListWrapper").append('<option value=""></option>');
+                            $.each(result.data, function (index, data) {
+                            $("#StateListWrapper").append('<option value="' + data.value + '">' + data.text + '</option>');
+                           
+                        });
+
+                        }
+                    });
+            });
+
+
+        $("#StateListWrapper,#selectlist").change(function () {
+            var StateId = $("#StateListWrapper").val();
+                $.ajax
+                    ({
+                        type: "GET",
+                    url: "/Vendor/CityListView?value=" + StateId,
+                        success: function (result) {
+                        $("#CityListWrapper").html(result)
+                        $("#CityListWrapper").append('<option value=""></option>');
+                            $.each(result.data, function (index, data) {
+                            $("#CityListWrapper").append('<option value="' + data.value + '">' + data.text + '</option>');
+                           
+                        });
+
+                        }
+                    });
+            });
+
+
+            // form
+
+        $('#step2').hide();
+        function nextButton() {
+            $('#step1').hide();
+            $('#step2').show();
+        }
+        
+        function preButton() {
+            $('#step2').hide();
+            $('#step1').show();
+        }
+
+
+        
+</script>
+
+    @*//Address List*@
+    <script src="~/js/VenderAddress.js"></script>
+}

@@ -1,0 +1,45 @@
+﻿@model List<Country>
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary m-lg-0 py-0">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Country List</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="text-end">
+                <a asp-controller="Country" asp-action="Upsert" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i>Create New Country
+                </a>
+
+            </div>
+
+        </div>
+        <table id="tblData" class="table table-bordered table-striped" style="100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th></th>
+
+                </tr>
+            </thead>
+
+        </table>
+
+
+    </div>
+
+</div>
+
+@section Scripts{
+    <script src="~/js/Country.js"></script>
+
+}

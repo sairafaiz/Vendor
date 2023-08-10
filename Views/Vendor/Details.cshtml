@@ -1,0 +1,131 @@
+﻿
+@model Vendor
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary m-lg-0 py-0">
+        <div class="row">
+            <div class="col-12 text-center">
+
+                 <h2 class="text-white py-2">Details</h2>
+                
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <form method="post" class="row" enctype="multipart/form-data">
+            <input asp-for="Id" hidden />
+            <div class="row">
+                <div class="col-10">
+                    <div class="border p-3">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Name" disabled class="form-control border-0 shadow" />
+                            <label asp-for="Name" class="ms-2"></label>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Email" disabled type="text" class="form-control border-0 shadow" />
+                            <label asp-for="Email" class="ms-2"></label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="PhoneNumber" disabled type="number" class="form-control border-0 shadow" />
+                            <label asp-for="PhoneNumber" class="ms-2"></label>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Notes" disabled class="form-control border-0 shadow" />
+                            <label asp-for="Notes" class="ms-2"></label>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input type="file" name="file" disabled class="form-control border-0 shadow" multiple />
+                            <label asp-for="imageurl" class="ms-2"></label>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <select asp-for="@Model.City.State.CountryID" disabled asp-items="ViewBag.CountryList" class="form-select border-0 shadow" id="selectlist">
+                                <option></option>
+                            </select>
+                            <label class="ms-2">CountryID</label>
+                            @* <span asp-validation-for="CountryID" class="text-danger"></span>*@
+
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <select asp-for="@Model.City.StateID" disabled asp-items="ViewBag.StateList" class="form-select border-0 shadow" id="cityListWrapper">
+                                      <option></option>
+                            </select>
+                            <label class="ms-2">StateID</label>
+                            @*   <span asp-validation-for="StateID" class="text-danger"></span>*@
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <select asp-for="@Model.CityID" disabled asp-items="ViewBag.CityList" class="form-select border-0 shadow">
+                                <option></option>
+                            </select>
+                            <label asp-for="CityID" class="ms-2"></label>
+                            <span asp-validation-for="CityID" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row pt-2">
+
+                        <div class="col-6  col-md-6">
+
+                            <a asp-controller="Vendor" asp-action="Index" class="btn btn-primary  form-control">
+                                Back To List
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-2">
+
+                    <div class="border p-1 m-2 text-center">
+                        @if (Model.Id != 0)
+                        {
+                            <img src="@Model.imageurl" width="100%"
+                                 style="border-radius:5px; border:1px solid #bbb9b9" />
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </form>
+    </div>
+</div>
+
+
+@section Scripts
+    {
+    <script>
+
+
+        $("#selectlist").change(function () {
+            var countryId = $("#selectlist").val();
+            $.ajax
+                ({
+                    type: "GET",
+                    url: "/Vendor/stateListView?value=" + countryId,
+                    success: function (result) {
+                        $("#cityListWrapper").html(result)
+
+                        $.each(result.data, function (index, data) {
+                            $("#cityListWrapper").append('<option id="' + data.value + '">' + data.text + '</option>');
+                        });
+
+                    }
+                });
+
+        });
+
+    </script>
+}
